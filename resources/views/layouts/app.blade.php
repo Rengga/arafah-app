@@ -8,8 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         :root {
@@ -91,7 +92,6 @@
             padding-bottom: 4rem;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -104,6 +104,44 @@
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #bbb;
+        }
+
+        .swal2-popup {
+            border-radius: 15px !important;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif !important;
+            padding: 2rem !important;
+        }
+
+        .swal2-title {
+            font-size: 1.5rem !important;
+            font-weight: 600 !important;
+            color: #334155 !important; 
+        }
+
+        .swal2-html-container {
+            color: #64748b !important; 
+        }
+
+        .swal2-confirm {
+            background-color: #0d6efd !important; 
+            border-radius: 8px !important;
+            padding: 10px 24px !important;
+            font-weight: 500 !important;
+            box-shadow: 0 4px 6px -1px rgba(13, 110, 253, 0.2) !important;
+        }
+
+        .swal2-cancel {
+            border-radius: 8px !important;
+            padding: 10px 24px !important;
+            font-weight: 500 !important;
+        }
+
+        .swal2-icon {
+            border-width: 2px !important;
+        }
+
+        .swal2-show {
+            animation: swal2-show 0.3s ease-out !important;
         }
     </style>
 </head>

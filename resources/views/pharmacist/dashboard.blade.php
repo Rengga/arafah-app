@@ -178,13 +178,21 @@
             if (res.ok) {
                 location.reload(); 
             } else {
-                alert('Gagal memproses resep.');
+                Swal.fire({
+                    title: "Gagal!",
+                    text: 'Gagal memproses resep.',
+                    icon: "error"
+                });
                 button.disabled = false;
                 button.innerHTML = 'LAYANI';
             }
         } catch (err) {
             console.error(err);
-            alert('Terjadi kesalahan jaringan!');
+            Swal.fire({
+                title: "Gagal!",
+                text: 'Terjadi kesalahan jaringan!',
+                icon: "error"
+            });
         }
     });
 </script>

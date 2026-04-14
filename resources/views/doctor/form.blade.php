@@ -220,27 +220,19 @@
 </div>
 
 <script>
-    // Ambil jumlah item (penting untuk edit)
     let index = {{ ($isEdit && $examination->prescription) ? count($examination->prescription->items) : 1 }};
     let medicineDataCache = [];
     
-    // Inisialisasi: Load daftar obat
     async function loadMedicines() {
-        console.log("Memulai loadMedicines..."); // Debugging
         try {
-            // Gunakan url() helper agar path selalu benar
             const res = await fetch("{{ url('/medicines') }}", {
                 headers: { 'Accept': 'application/json' }
             });
 
             const data = await res.json();
-            console.log("Data mentah dari server:", data);
 
-            // PERBAIKAN: API membungkus data di dalam properti 'medicines'
-            // Kita pastikan medicineDataCache selalu berupa Array
             medicineDataCache = data.medicines || data; 
 
-            // Isi semua select yang sudah ada
             document.querySelectorAll('.medicine-select').forEach(select => {
                 populateSelect(select);
                 
@@ -249,7 +241,6 @@
                     select.value = selectedId;
                 }
             });
-            console.log("Daftar obat berhasil dimuat ke Select.");
 
         } catch (e) {
             console.error("Gagal memuat data obat:", e);
@@ -259,7 +250,6 @@
     function populateSelect(selectElement) {
         selectElement.innerHTML = '<option value="">Pilih Obat...</option>';
         
-        // Pastikan medicineDataCache adalah array sebelum di-loop
         if (Array.isArray(medicineDataCache)) {
             medicineDataCache.forEach(med => {
                 let opt = document.createElement('option');
@@ -307,7 +297,6 @@
         index++;
     }
 
-    // Handle perubahan obat
     document.addEventListener('change', async function(e) {
         if (e.target.classList.contains('medicine-select')) {
             const id = e.target.value;
@@ -320,11 +309,9 @@
             if (id) {
                 try {
                     priceInput.classList.add('loading-field');
-                    // Tambahkan URL helper
                     const res = await fetch(`{{ url('/medicines') }}/${id}/prices`);
                     const data = await res.json();
                     
-                    // Sesuaikan dengan struktur response harga API kamu
                     let rawPrice = (data.prices && data.prices.length > 0) ? data.prices[0].unit_price : 0;
                     
                     priceInput.classList.remove('loading-field');
@@ -332,7 +319,7 @@
                     priceInput.value = new Intl.NumberFormat('id-ID').format(rawPrice);
                 } catch (error) { 
                     priceInput.classList.remove('loading-field');
-                    priceInput.disabled = false; // Tetap aktifkan agar bisa isi manual jika API gagal
+                    priceInput.disabled = false; 
                 }
             }
         }
@@ -357,7 +344,6 @@
         const btn = document.getElementById('btnSimpan');
         btn.disabled = true;
         
-        // Bersihkan titik sebelum kirim
         document.querySelectorAll('.price-input').forEach(input => {
             input.value = input.value.replace(/\./g, '');
         });
@@ -376,20 +362,31 @@
             });
 
             if (res.ok) {
-                alert('Berhasil!');
-                window.location.href = '/doctor/dashboard';
+                Swal.fire({
+                    title: "Berhasil!",
+                    icon: "success"
+                }).then(() => {
+                    window.location.href = '/doctor/dashboard';
+                });
             } else {
                 const errData = await res.json();
-                alert('Gagal: ' + (errData.message || 'Cek kembali data'));
+                Swal.fire({
+                    title: "Gagal!",
+                    text: errData.message || 'Cek kembali data',
+                    icon: "error"
+                });
             }
         } catch (err) {
-            alert('Kesalahan jaringan!');
+            Swal.fire({
+                title: "Gagal!",
+                text: 'Kesalahan jaringan!',
+                icon: "error"
+            });
         } finally {
             btn.disabled = false;
         }
     });
 
-    // Jalankan inisialisasi
     loadMedicines();
 </script>
 @endsection

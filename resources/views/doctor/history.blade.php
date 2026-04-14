@@ -14,8 +14,8 @@
                 <thead style="background-color: #f8f9fa;">
                     <tr>
                         <th class="ps-4 py-3 text-uppercase text-secondary" style="font-size: 0.75rem; font-weight: 600;">ID</th>
-                        <th class="py-3 text-uppercase text-secondary" style="font-size: 0.75rem; font-weight: 600;">Pasien</th> {{-- Kolom Baru --}}
-                        <th class="py-3 text-uppercase text-secondary" style="font-size: 0.75rem; font-weight: 600;">Tanggal</th> {{-- Header Diganti --}}
+                        <th class="py-3 text-uppercase text-secondary" style="font-size: 0.75rem; font-weight: 600;">Pasien</th> 
+                        <th class="py-3 text-uppercase text-secondary" style="font-size: 0.75rem; font-weight: 600;">Tanggal</th> 
                         <th class="py-3 text-uppercase text-secondary" style="font-size: 0.75rem; font-weight: 600;">Detail Vital</th>
                         <th class="py-3 text-uppercase text-secondary" style="font-size: 0.75rem; font-weight: 600;">Status Resep</th>
                         <th class="py-3 text-uppercase text-secondary text-center" style="font-size: 0.75rem; font-weight: 600;">Aksi</th>
