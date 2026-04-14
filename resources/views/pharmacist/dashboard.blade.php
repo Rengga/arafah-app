@@ -160,11 +160,29 @@
         if (!button) return;
 
         const id = button.dataset.id;
-        if (!confirm('Yakin mau melayani resep ini?')) return;
+
+        const result = await Swal.fire({
+            title: "Konfirmasi",
+            text: "Yakin mau melayani resep ini?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Ya, layani!",
+            cancelButtonText: "Batal",
+            reverseButtons: true,
+            customClass: {
+                confirmButton: 'btn btn-primary px-4 py-2 mx-2',
+                cancelButton: 'btn btn-outline-secondary px-4 py-2 mx-2'
+            },
+            buttonsStyling: false
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
             button.disabled = true;
+            const originalText = button.innerHTML;
             button.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
 
             const res = await fetch(`/pharmacist/serve/${id}`, {
@@ -176,23 +194,28 @@
             });
 
             if (res.ok) {
+                await Swal.fire({
+                    title: "Berhasil!",
+                    text: "Resep berhasil dilayani.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                });
                 location.reload(); 
             } else {
-                Swal.fire({
-                    title: "Gagal!",
-                    text: 'Gagal memproses resep.',
-                    icon: "error"
-                });
-                button.disabled = false;
-                button.innerHTML = 'LAYANI';
+                const data = await res.json();
+                throw new Error(data.message || 'Gagal memproses resep.');
             }
         } catch (err) {
             console.error(err);
             Swal.fire({
                 title: "Gagal!",
-                text: 'Terjadi kesalahan jaringan!',
+                text: err.message || 'Terjadi kesalahan jaringan!',
                 icon: "error"
             });
+            
+            button.disabled = false;
+            button.innerHTML = 'LAYANI';
         }
     });
 </script>
