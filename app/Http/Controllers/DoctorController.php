@@ -108,6 +108,8 @@ class DoctorController extends Controller
         return DB::transaction(function () use ($prescription, $request) {
             
             $exam = $prescription->examination;
+
+            $oldData = $exam->getOriginal();
             
             $filePath = $exam->berkas_pemeriksaan;
             if ($request->hasFile('berkas_pemeriksaan')) {
@@ -129,6 +131,26 @@ class DoctorController extends Controller
                 'catatan' => $request->catatan,
                 'berkas_pemeriksaan' => $filePath,
             ]);
+
+            if ($exam->wasChanged()) {
+                $changes = $exam->getChanges();
+                $logDetails = [];
+                
+                foreach ($changes as $key => $newValue) {
+                    if ($key === 'updated_at') continue; 
+                    
+                    $logDetails[$key] = [
+                        'from' => $oldData[$key] ?? 'N/A',
+                        'to' => $newValue
+                    ];
+                }
+    
+                \Illuminate\Support\Facades\Log::info("Pemeriksaan Updated", [
+                    'exam_id' => $exam->id,
+                    'user' => auth()->user()->name,
+                    'changes' => $logDetails
+                ]);
+            }
 
             
             $prescription->items()->delete();
