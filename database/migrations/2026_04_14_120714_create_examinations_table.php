@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('doctor_id')->constrained('users');
             
-            // TAMBAHKAN NAMA PASIEN
             $table->string('nama_pasien'); 
             
             $table->dateTime('waktu_pemeriksaan');
